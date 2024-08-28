@@ -1,0 +1,15 @@
+[package]
+name = "anvil"
+version = "0.1.0"
+authors = ["Matthew J Perez <matt@mperez.io>"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+crossterm = { version = "0.28.1", features = ["event-stream"] }
+futures = "0.3.30"
+http-body-util = "0.1.2"
+hyper = { version = "1.4.1", features = ["full"] }
+hyper-util = { version = "0.1.7", features = ["full"] }
+ratatui = "0.28.0"
+tokio = { version = "1.39.3", features = ["full"] }
