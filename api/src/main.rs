@@ -1,9 +1,11 @@
+use anvil_api::Base;
 use reqwest::{tls::Version, ClientBuilder, Identity};
 use std::{
     env,
     fs::File,
     io::{Read, Result},
 };
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let incus_ip = env::var("INCUS_IP").unwrap_or("localhost".to_string());
@@ -32,9 +34,11 @@ async fn main() -> Result<()> {
         .get(format!("https://{}:8443/", incus_ip))
         .send()
         .await
+        .unwrap()
+        .json::<Base>()
+        .await
         .unwrap();
     println!("{:?}", r);
-    println!("{:?}", r.text().await);
 
     Ok(())
 }
