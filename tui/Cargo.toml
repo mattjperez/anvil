@@ -1,0 +1,19 @@
+[package]
+name = "anvil-tui"
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[dependencies]
+crossterm.workspace = true
+futures.workspace = true
+ratatui.workspace = true
+tokio.workspace = true
+http-body-util.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+reqwest.workspace = true
+dirs.workspace = true

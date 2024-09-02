@@ -1,15 +1,24 @@
-[package]
-name = "anvil"
-version = "0.1.0"
-authors = ["Matthew J Perez <matt@mperez.io>"]
-license = "MIT"
-edition = "2021"
+[workspace]
+members = [
+  "tui",
+  "api"
+]
 
-[dependencies]
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Matthew J Perez <matt@mperez.io>"]
+description = "Terminal UI for managing Incus"
+license = "MIT"
+repository = "https://github.com/mattjperez/anvil"
+
+[workspace.dependencies]
 crossterm = { version = "0.28.1", features = ["event-stream"] }
 futures = "0.3.30"
+ratatui = "0.28.0"
+tokio = { version = "1.39.3", features = ["full"] }
 http-body-util = "0.1.2"
 hyper = { version = "1.4.1", features = ["full"] }
 hyper-util = { version = "0.1.7", features = ["full"] }
-ratatui = "0.28.0"
-tokio = { version = "1.39.3", features = ["full"] }
+reqwest = {version = "0.12.7", features = ["rustls-tls"]}
+dirs = "5"
