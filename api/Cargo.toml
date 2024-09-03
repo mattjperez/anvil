@@ -8,13 +8,7 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-crossterm.workspace = true
-futures.workspace = true
-ratatui.workspace = true
 tokio.workspace = true
-http-body-util.workspace = true
-hyper.workspace = true
-hyper-util.workspace = true
 reqwest.workspace = true
 dirs.workspace = true
 serde.workspace = true

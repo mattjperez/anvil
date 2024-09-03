@@ -1,5 +1,5 @@
-use anvil_api::Base;
-use reqwest::{tls::Version, ClientBuilder, Identity};
+use anvil_api::{server::Server, Base};
+use reqwest::{tls::Version, Certificate, ClientBuilder, Identity};
 use std::{
     env,
     fs::File,
@@ -9,9 +9,11 @@ use std::{
 #[tokio::main]
 async fn main() -> Result<()> {
     let incus_ip = env::var("INCUS_IP").unwrap_or("localhost".to_string());
-    let config_dir = dirs::config_local_dir().unwrap().join("anvil");
-    let cert_path = config_dir.join("ca-cert.pem");
-    let key_path = config_dir.join("ca-key.pem");
+    let config_dir = dirs::config_local_dir().unwrap().join("incus");
+    // let cert_path = config_dir.join("ca-cert.pem");
+    let cert_path = config_dir.join("client.crt");
+    // let key_path = config_dir.join("ca-key.pem");
+    let key_path = config_dir.join("client.key");
     // Create an application.
     let mut buf = Vec::new();
     File::open(key_path).unwrap().read_to_end(&mut buf).unwrap();
@@ -31,14 +33,16 @@ async fn main() -> Result<()> {
         .build()
         .unwrap();
     let r = client
-        .get(format!("https://{}:8443/", incus_ip))
+        // .get(format!("https://{}:8443/1.0/instances", incus_ip))
+        .get(format!("https://{}:8443/1.0", incus_ip))
+        //.form(&[("project", "default")])
         .send()
         .await
         .unwrap()
-        .json::<Base>()
+        .json::<Server>()
         .await
         .unwrap();
-    println!("{:?}", r);
+    println!("{:#?}", r);
 
     Ok(())
 }
