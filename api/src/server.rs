@@ -1,3 +1,5 @@
+use std::net::SocketAddr;
+
 use crate::Base;
 use serde::{Deserialize, Serialize};
 use serde_json::{Number, Value};
@@ -30,16 +32,16 @@ pub struct ServerMetadata {
     //     ],
     auth_methods: Vec<String>,
     //     "auth_user_method": "unix",
-    auth_user_method: Option<String>,
+    auth_user_method: String,
     //     "auth_user_name": "uid=201105",
-    auth_user_name: Option<String>,
+    auth_user_name: String,
     //     "config": {
     //       "core.https_address": ":8443"
     //     },
     config: Value,
     environment: Environment,
     //     "public": false
-    public: Option<bool>,
+    public: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -47,7 +49,7 @@ pub struct Environment {
     //       "addresses": [
     //         ":8443"
     //       ],
-    addresses: Vec<String>,
+    addresses: Vec<SocketAddr>,
     //       "architectures": [
     //         "x86_64",
     //         "i686"
@@ -71,7 +73,7 @@ pub struct Environment {
     //         "netnsid_getifaddrs": "true",
     //         "seccomp_listener": "true"
     //       },
-    kernel_features: Option<KernelFeatures>,
+    kernel_features: KernelFeatures,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

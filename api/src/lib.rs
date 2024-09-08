@@ -1,13 +1,11 @@
 pub mod server;
 
 use serde::{Deserialize, Serialize};
-use serde_json::{Number, Value};
-use serde_repr::*;
+use serde_json::Value;
 use std::collections::HashMap;
 
-#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
-#[repr(u16)]
-pub enum StatusCode {
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Status {
     OperationCreated = 100,
     Started = 101,
     Stopped = 102,
@@ -28,13 +26,23 @@ pub enum StatusCode {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
+enum Type {
+    /// standard synchronous operation
+    Sync,
+    /// background asynchronous operation
+    Async,
+    Error,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Base {
-    status: String,
-    status_code: StatusCode,
-    r#type: String,
+    status: Status,
+    status_code: u16,
+    r#type: Type,
     operation: String,
     error: String,
-    error_code: Number,
-    #[serde(flatten)]
-    extra: HashMap<String, Value>,
+    error_code: u16,
+    // #[serde(flatten)]
+    // extra: HashMap<String, Value>,
 }
