@@ -1,6 +1,6 @@
 use crate::Base;
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Number, Value};
+use serde_json::{Number, Value};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Server {

@@ -1,5 +1,5 @@
-use anvil_api::{server::Server, Base};
-use reqwest::{tls::Version, Certificate, ClientBuilder, Identity};
+use anvil_api::server::Server;
+use reqwest::{tls::Version, ClientBuilder, Identity};
 use std::{
     env,
     fs::File,
@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
         .use_rustls_tls()
         .min_tls_version(Version::TLS_1_3)
         // client certificate already registered by incus server
-        // .add_root_certificate(Certificate::from_pem(&buf).unwrap())
+        // .add_root_certificate(reqwest::Certificate::from_pem(&buf).unwrap())
         .danger_accept_invalid_certs(true)
         .tls_info(true)
         .identity(id)
