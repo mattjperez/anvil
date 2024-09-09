@@ -1,8 +1,10 @@
+pub mod instances;
 pub mod server;
 
+pub use instances::Instances;
+pub use server::Server;
+
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Status {
@@ -44,5 +46,46 @@ pub struct Base {
     error: String,
     error_code: u16,
     // #[serde(flatten)]
-    // extra: HashMap<String, Value>,
+    // extra: std::collections::HashMap<String, serde_json::Value>,
+}
+
+#[cfg(test)]
+mod test_utils {
+    use reqwest::{tls::Version, Client, ClientBuilder, Identity};
+    use std::{env, fs::File, io::Read, sync::LazyLock};
+
+    pub static INCUS_IP: &str = env!("INCUS_IP");
+    pub static CLIENT: LazyLock<Client> = LazyLock::new(|| {
+        let config_dir = dirs::config_local_dir().unwrap().join("incus");
+        // let cert_path = config_dir.join("ca-cert.pem");
+        let cert_path = config_dir.join("client.crt");
+        // let key_path = config_dir.join("ca-key.pem");
+        let key_path = config_dir.join("client.key");
+        // Create an application.
+        let mut buf = Vec::new();
+        File::open(key_path).unwrap().read_to_end(&mut buf).unwrap();
+        File::open(cert_path)
+            .unwrap()
+            .read_to_end(&mut buf)
+            .unwrap();
+        let id = Identity::from_pem(&buf).unwrap();
+        ClientBuilder::new()
+            .use_rustls_tls()
+            .min_tls_version(Version::TLS_1_3)
+            // client certificate already registered by incus server
+            // .add_root_certificate(reqwest::Certificate::from_pem(&buf).unwrap())
+            .danger_accept_invalid_certs(true)
+            .tls_info(true)
+            .identity(id)
+            .build()
+            .unwrap()
+    });
+
+    pub async fn test_get(path: &str) -> reqwest::Response {
+        CLIENT
+            .get(format!("https://{}:8443/1.0{}", INCUS_IP, path))
+            //.form(&[("project", "default")])
+            .send()
+            .await.unwrap()
+    }
 }

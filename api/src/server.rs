@@ -8,7 +8,7 @@ use serde_json::{Number, Value};
 pub struct Server {
     #[serde(flatten)]
     base: Base,
-    metadata: ServerMetadata,
+    metadata: Option<ServerMetadata>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -116,4 +116,24 @@ pub struct KernelFeatures {
     storage_supported_drivers: Option<Value>,
     //       "storage_version": "1 | 0.8.4-1ubuntu11"
     storage_version: Option<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::test_utils::*;
+
+    use std::io::Result;
+    use tokio_test::assert_ok;
+
+    #[tokio::test]
+    async fn test_server_root() -> Result<()> {
+        let r = test_get("")
+            .await
+            .json::<Server>()
+            .await;
+
+        assert_ok!(r);
+        Ok(())
+    }
 }
