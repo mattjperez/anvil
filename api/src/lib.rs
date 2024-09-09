@@ -55,7 +55,8 @@ mod test_utils {
     use std::{env, fs::File, io::Read, sync::LazyLock};
 
     pub static INCUS_IP: &str = env!("INCUS_IP");
-    pub static CLIENT: LazyLock<Client> = LazyLock::new(|| {
+    pub static INCUS_PORT: u32 = 8443;
+    pub static ID: LazyLock<Identity> = LazyLock::new(|| {
         let config_dir = dirs::config_local_dir().unwrap().join("incus");
         // let cert_path = config_dir.join("ca-cert.pem");
         let cert_path = config_dir.join("client.crt");
@@ -68,7 +69,11 @@ mod test_utils {
             .unwrap()
             .read_to_end(&mut buf)
             .unwrap();
-        let id = Identity::from_pem(&buf).unwrap();
+        Identity::from_pem(&buf).unwrap()
+
+    });
+
+    pub fn new_client() -> Client {
         ClientBuilder::new()
             .use_rustls_tls()
             .min_tls_version(Version::TLS_1_3)
@@ -76,16 +81,11 @@ mod test_utils {
             // .add_root_certificate(reqwest::Certificate::from_pem(&buf).unwrap())
             .danger_accept_invalid_certs(true)
             .tls_info(true)
-            .identity(id)
+            .identity(ID.clone())
             .build()
             .unwrap()
-    });
-
-    pub async fn test_get(path: &str) -> reqwest::Response {
-        CLIENT
-            .get(format!("https://{}:8443/1.0{}", INCUS_IP, path))
-            //.form(&[("project", "default")])
-            .send()
-            .await.unwrap()
+    }
+    pub fn incus_path(path: &str) -> String {
+        format!("https://{}:{}/1.0{}", INCUS_IP, INCUS_PORT, path)
     }
 }

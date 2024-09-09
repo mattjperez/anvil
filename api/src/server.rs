@@ -128,10 +128,14 @@ mod tests {
 
     #[tokio::test]
     async fn test_server_root() -> Result<()> {
-        let r = test_get("")
-            .await
+
+        let c = new_client();
+        let r = c.get(incus_path("")).send()
+            .await.unwrap()
             .json::<Server>()
             .await;
+
+        println!("{:#?}", r);
 
         assert_ok!(r);
         Ok(())

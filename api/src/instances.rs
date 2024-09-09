@@ -19,10 +19,15 @@ mod tests {
 
     #[tokio::test]
     async fn test_instances_root() -> Result<()> {
-        let r = test_get("/instances")
-            .await
+
+
+        let c = new_client();
+        let r = c.get(incus_path("/instances")).send()
+            .await.unwrap()
             .json::<Instances>()
             .await;
+
+        println!("{:#?}", r);
 
         assert_ok!(r);
         Ok(())
