@@ -1,5 +1,5 @@
 [package]
-name = "anvil-tui"
+name = "anvil"
 authors.workspace = true
 description.workspace = true
 edition.workspace = true
@@ -8,6 +8,7 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
+anvil-api.workspace = true
 crossterm.workspace = true
 futures.workspace = true
 ratatui.workspace = true

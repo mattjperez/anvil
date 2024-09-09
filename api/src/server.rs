@@ -127,8 +127,7 @@ mod tests {
     use tokio_test::assert_ok;
 
     #[tokio::test]
-    async fn test_server_root() -> Result<()> {
-
+    async fn test_server_root_get() -> Result<()> {
         let c = new_client();
         let r = c.get(incus_path("")).send()
             .await.unwrap()

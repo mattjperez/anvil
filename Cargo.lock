@@ -36,6 +36,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c6cb57a04249c6480766f7f7cef5467412af1490f8d1e243141daddada3264f"
 
 [[package]]
+name = "anvil"
+version = "0.1.0"
+dependencies = [
+ "anvil-api",
+ "crossterm",
+ "dirs",
+ "futures",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "ratatui",
+ "reqwest",
+ "tokio",
+]
+
+[[package]]
 name = "anvil-api"
 version = "0.1.0"
 dependencies = [
@@ -46,21 +62,6 @@ dependencies = [
  "serde_repr",
  "tokio",
  "tokio-test",
-]
-
-[[package]]
-name = "anvil-tui"
-version = "0.1.0"
-dependencies = [
- "crossterm",
- "dirs",
- "futures",
- "http-body-util",
- "hyper",
- "hyper-util",
- "ratatui",
- "reqwest",
- "tokio",
 ]
 
 [[package]]
